@@ -1,0 +1,315 @@
+{
+  "version": 1,
+  "medicines": [
+    {
+      "id": "m1",
+      "name": "Panadol",
+      "generic": "Paracetamol",
+      "strength": "500mg",
+      "form": "Tablet",
+      "category": "Pain relief",
+      "manufacturer": "Haleon",
+      "barcode": "896400001001",
+      "rack": "A-01",
+      "unitsPerPack": 100,
+      "reorder": 100,
+      "price": 3.5
+    },
+    {
+      "id": "m2",
+      "name": "Augmentin",
+      "generic": "Amoxicillin + clavulanate",
+      "strength": "625mg",
+      "form": "Tablet",
+      "category": "Antibiotics",
+      "manufacturer": "GSK",
+      "barcode": "896400001002",
+      "rack": "A-04",
+      "unitsPerPack": 6,
+      "reorder": 24,
+      "price": 48
+    },
+    {
+      "id": "m3",
+      "name": "Glucophage",
+      "generic": "Metformin",
+      "strength": "500mg",
+      "form": "Tablet",
+      "category": "Diabetes",
+      "manufacturer": "Martin Dow",
+      "barcode": "896400001003",
+      "rack": "B-02",
+      "unitsPerPack": 50,
+      "reorder": 50,
+      "price": 5.8
+    },
+    {
+      "id": "m4",
+      "name": "Rigix",
+      "generic": "Cetirizine",
+      "strength": "10mg",
+      "form": "Tablet",
+      "category": "Allergy",
+      "manufacturer": "AGP",
+      "barcode": "896400001004",
+      "rack": "A-06",
+      "unitsPerPack": 30,
+      "reorder": 30,
+      "price": 10
+    },
+    {
+      "id": "m5",
+      "name": "Nexum",
+      "generic": "Esomeprazole",
+      "strength": "40mg",
+      "form": "Capsule",
+      "category": "Digestive health",
+      "manufacturer": "Getz Pharma",
+      "barcode": "896400001005",
+      "rack": "C-01",
+      "unitsPerPack": 14,
+      "reorder": 28,
+      "price": 32
+    },
+    {
+      "id": "m6",
+      "name": "Ventolin",
+      "generic": "Salbutamol",
+      "strength": "100mcg",
+      "form": "Inhaler",
+      "category": "Respiratory",
+      "manufacturer": "GSK",
+      "barcode": "896400001006",
+      "rack": "C-04",
+      "unitsPerPack": 1,
+      "reorder": 5,
+      "price": 460
+    },
+    {
+      "id": "m7",
+      "name": "Brufen",
+      "generic": "Ibuprofen",
+      "strength": "100mg/5ml",
+      "form": "Suspension",
+      "category": "Pain relief",
+      "manufacturer": "Abbott",
+      "barcode": "896400001007",
+      "rack": "D-02",
+      "unitsPerPack": 1,
+      "reorder": 10,
+      "price": 155
+    },
+    {
+      "id": "m8",
+      "name": "ORS",
+      "generic": "Oral rehydration salts",
+      "strength": "1 sachet",
+      "form": "Sachet",
+      "category": "Digestive health",
+      "manufacturer": "Himont",
+      "barcode": "896400001008",
+      "rack": "D-05",
+      "unitsPerPack": 20,
+      "reorder": 20,
+      "price": 35
+    },
+    {
+      "id": "m9",
+      "name": "Insulin syringe",
+      "generic": "Disposable syringe",
+      "strength": "1ml",
+      "form": "Surgical",
+      "category": "Surgical supplies",
+      "manufacturer": "BD",
+      "barcode": "896400001009",
+      "rack": "E-01",
+      "unitsPerPack": 100,
+      "reorder": 30,
+      "price": 45
+    },
+    {
+      "id": "m10",
+      "name": "Calcium + D3",
+      "generic": "Calcium + vitamin D3",
+      "strength": "600mg",
+      "form": "Tablet",
+      "category": "Vitamins",
+      "manufacturer": "Sample Pharma",
+      "barcode": "896400001010",
+      "rack": "B-05",
+      "unitsPerPack": 30,
+      "reorder": 30,
+      "price": 18
+    }
+  ],
+  "batches": [
+    {
+      "id": "b1",
+      "medicineId": "m1",
+      "number": "PN-2401",
+      "expiry": "2027-02-28",
+      "qty": 340,
+      "cost": 2.7,
+      "price": 3.5,
+      "status": "available",
+      "supplierId": "s1"
+    },
+    {
+      "id": "b2",
+      "medicineId": "m1",
+      "number": "PN-2409",
+      "expiry": "2028-08-31",
+      "qty": 600,
+      "cost": 2.9,
+      "price": 3.8,
+      "status": "available",
+      "supplierId": "s1"
+    },
+    {
+      "id": "b3",
+      "medicineId": "m2",
+      "number": "AG-1826",
+      "expiry": "2026-11-30",
+      "qty": 42,
+      "cost": 38,
+      "price": 48,
+      "status": "available",
+      "supplierId": "s2"
+    },
+    {
+      "id": "b4",
+      "medicineId": "m3",
+      "number": "GL-8021",
+      "expiry": "2028-04-30",
+      "qty": 250,
+      "cost": 4.2,
+      "price": 5.8,
+      "status": "available",
+      "supplierId": "s1"
+    },
+    {
+      "id": "b5",
+      "medicineId": "m4",
+      "number": "RG-3102",
+      "expiry": "2027-06-30",
+      "qty": 18,
+      "cost": 7,
+      "price": 10,
+      "status": "available",
+      "supplierId": "s2"
+    },
+    {
+      "id": "b6",
+      "medicineId": "m5",
+      "number": "NX-6220",
+      "expiry": "2026-12-31",
+      "qty": 84,
+      "cost": 24,
+      "price": 32,
+      "status": "available",
+      "supplierId": "s3"
+    },
+    {
+      "id": "b7",
+      "medicineId": "m6",
+      "number": "VN-9010",
+      "expiry": "2027-10-31",
+      "qty": 4,
+      "cost": 360,
+      "price": 460,
+      "status": "available",
+      "supplierId": "s2"
+    },
+    {
+      "id": "b8",
+      "medicineId": "m7",
+      "number": "BR-1228",
+      "expiry": "2026-09-30",
+      "qty": 12,
+      "cost": 115,
+      "price": 155,
+      "status": "available",
+      "supplierId": "s1"
+    },
+    {
+      "id": "b9",
+      "medicineId": "m8",
+      "number": "OR-6011",
+      "expiry": "2027-01-31",
+      "qty": 80,
+      "cost": 25,
+      "price": 35,
+      "status": "available",
+      "supplierId": "s3"
+    },
+    {
+      "id": "b10",
+      "medicineId": "m9",
+      "number": "BD-8870",
+      "expiry": "2029-06-30",
+      "qty": 200,
+      "cost": 32,
+      "price": 45,
+      "status": "available",
+      "supplierId": "s3"
+    },
+    {
+      "id": "b11",
+      "medicineId": "m10",
+      "number": "CD-1012",
+      "expiry": "2027-04-30",
+      "qty": 30,
+      "cost": 12,
+      "price": 18,
+      "status": "quarantine",
+      "supplierId": "s1"
+    }
+  ],
+  "customers": [
+    {
+      "id": "c1",
+      "name": "Ahmed Ali",
+      "phone": "0300 1234567",
+      "address": "Gulberg, Lahore"
+    },
+    {
+      "id": "c2",
+      "name": "Sara Khan",
+      "phone": "0321 7654321",
+      "address": "Model Town, Lahore"
+    }
+  ],
+  "suppliers": [
+    {
+      "id": "s1",
+      "name": "City Medical Distributors",
+      "phone": "042 35123456",
+      "address": "Lahore"
+    },
+    {
+      "id": "s2",
+      "name": "Healthline Distribution",
+      "phone": "042 35789012",
+      "address": "Lahore"
+    },
+    {
+      "id": "s3",
+      "name": "National Pharma Supply",
+      "phone": "042 36234567",
+      "address": "Lahore"
+    }
+  ],
+  "sales": [],
+  "purchases": [],
+  "movements": [],
+  "returns": [],
+  "settings": {
+    "name": "Ilmdeen Pharmacy",
+    "address": "Main Market, Lahore, Pakistan",
+    "phone": "042 3512 3456",
+    "receiptNote": "Thank you. Please retain this receipt for any query.",
+    "paper": "80mm",
+    "alertDays": 90
+  },
+  "lastBackup": null
+}

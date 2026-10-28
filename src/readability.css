@@ -1,0 +1,298 @@
+/* Counter screens need readable labels on standard 1366px pharmacy monitors. */
+.nav-item {
+  font-size: 12px;
+  height: 37px;
+}
+.nav-group {
+  margin-bottom: 17px;
+}
+.nav-title {
+  font-size: 9px;
+}
+.brand-sub {
+  font-size: 8px;
+}
+.stat-top {
+  font-size: 12px;
+  color: #64766a;
+}
+.stat-detail {
+  font-size: 10px;
+  color: #768771;
+}
+.page-heading p {
+  color: #7b897d;
+}
+.panel-heading p {
+  font-size: 11px;
+  color: #84927c;
+}
+.badge {
+  font-size: 10px;
+}
+.quick-action strong {
+  font-size: 12px;
+  color: #4e6843;
+}
+.quick-action small {
+  font-size: 10px;
+  color: #7d9171;
+}
+.safe-note {
+  color: #7a8f6e;
+}
+.safe-note strong {
+  color: #87977b;
+}
+.welcome-banner p {
+  color: #7d936f;
+}
+.attention-row strong {
+  font-size: 12px;
+  color: #6c825c;
+}
+.attention-row small {
+  font-size: 10px;
+  color: #8d9f7e;
+}
+.text-button {
+  font-size: 11px;
+  color: #64844e;
+}
+.empty h3 {
+  font-size: 13px;
+  color: #728967;
+}
+.empty p {
+  font-size: 11px;
+  color: #8f9f83;
+}
+.primary,
+.secondary {
+  font-size: 12px;
+}
+.toolbar input {
+  font-size: 12px;
+}
+.filter-tabs button {
+  font-size: 11px;
+}
+.table-search input::placeholder {
+  color: #8d9c80;
+}
+th {
+  font-size: 10px;
+  color: #7d8e6e;
+}
+td {
+  font-size: 12px;
+  color: #667b57;
+}
+td strong {
+  font-size: 12px;
+  color: #4d6741;
+}
+td small {
+  font-size: 10px;
+  color: #869979;
+}
+.muted {
+  color: #869979;
+}
+.medicine-card h3 {
+  font-size: 14px;
+  color: #52743d;
+}
+.medicine-card h3 span {
+  font-size: 11px;
+  color: #7e966b;
+}
+.medicine-card p {
+  font-size: 11px;
+  color: #8a9d79;
+}
+.medicine-stock {
+  font-size: 10px;
+  color: #82976e;
+}
+.medicine-stock > span:last-child {
+  font-size: 9px;
+  color: #93a680;
+}
+.medicine-card-bottom strong {
+  font-size: 15px;
+  color: #567a3e;
+}
+.medicine-card-bottom small {
+  font-size: 10px;
+  color: #93a480;
+}
+.form-tag {
+  font-size: 9px;
+  color: #8a9c78;
+}
+.category-chips button {
+  font-size: 10px;
+  color: #81966b;
+}
+.catalog-label,
+.catalog-foot {
+  font-size: 10px;
+  color: #8c9e7c;
+}
+.pos-search input::placeholder {
+  color: #849970;
+}
+.bill-heading h2 {
+  font-size: 14px;
+}
+.bill-heading p {
+  font-size: 10px;
+  color: #92a77c;
+}
+.customer-select select {
+  font-size: 12px;
+  color: #728e59;
+}
+.bill-line-title strong {
+  font-size: 13px;
+  color: #52753b;
+}
+.bill-line-title small {
+  font-size: 10px;
+  color: #8aa072;
+}
+.batch-select select {
+  font-size: 10px;
+  color: #8b9f74;
+}
+.bill-line-controls > strong {
+  font-size: 12px;
+  color: #5f7e47;
+}
+.quantity-control input {
+  font-size: 11px;
+  color: #6b8952;
+}
+.pack-button {
+  font-size: 9px;
+  color: #839b6a;
+}
+.line-discount {
+  font-size: 9px;
+  color: #94a97b;
+}
+.bill-summary > div:not(.payment-tabs):not(.hold-actions) {
+  font-size: 11px;
+  color: #7a9461;
+}
+.bill-summary strong {
+  font-size: 12px;
+  color: #658648;
+}
+.bill-summary .grand-total strong {
+  font-size: 25px;
+  color: #507b32;
+}
+.payment-tabs button {
+  font-size: 11px;
+  color: #7f9965;
+}
+.checkout-button {
+  font-size: 12px;
+}
+.hold-actions button {
+  font-size: 10px;
+  color: #849e6c;
+}
+.tendered small {
+  font-size: 9px;
+  color: #96ac7d;
+}
+.field {
+  font-size: 12px;
+  color: #6e865a;
+}
+.notice span {
+  font-size: 11px;
+  color: #7e956b;
+}
+.mini-stat > span {
+  font-size: 11px;
+  color: #879a75;
+}
+.backup-card > p,
+.modal p {
+  color: #81966f;
+}
+.form-footer > span {
+  color: #8e9f7e;
+}
+.invoice-link {
+  font-size: 11px;
+}
+.workspace-footer {
+  color: #8e9d84;
+}
+.report-foot {
+  font-size: 11px;
+  color: #849973;
+}
+.chart-y {
+  font-size: 10px;
+  color: #94a487;
+}
+.chart-column label {
+  font-size: 10px;
+  color: #899e78;
+}
+.chart-zero strong {
+  font-size: 12px;
+}
+.chart-zero small {
+  font-size: 11px;
+}
+.chart-footer > span {
+  font-size: 10px;
+}
+.chart-footer small {
+  font-size: 9px;
+}
+.top-date {
+  font-size: 11px;
+}
+@media (max-width: 760px) {
+  .category-chips button {
+    font-size: 10px;
+  }
+  .medicine-stock {
+    font-size: 9px;
+  }
+  .medicine-card h3 {
+    font-size: 13px;
+  }
+  .medicine-card p {
+    font-size: 10px;
+  }
+  .stat-top {
+    font-size: 11px;
+  }
+  .stat-detail {
+    font-size: 9px;
+  }
+  .nav-group {
+    margin-bottom: 18px;
+  }
+}
+@media print {
+  .receipt td,
+  .receipt td strong {
+    font-size: 9px;
+  }
+  .receipt td small {
+    font-size: 7px;
+  }
+  .receipt th {
+    font-size: 8px;
+  }
+}
