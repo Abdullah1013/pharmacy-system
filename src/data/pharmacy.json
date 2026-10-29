@@ -13,7 +13,8 @@
       "rack": "A-01",
       "unitsPerPack": 100,
       "reorder": 100,
-      "price": 3.5
+      "price": 3.5,
+      "companyId": "legacy-company-m1"
     },
     {
       "id": "m2",
@@ -27,7 +28,8 @@
       "rack": "A-04",
       "unitsPerPack": 6,
       "reorder": 24,
-      "price": 48
+      "price": 48,
+      "companyId": "legacy-company-m2"
     },
     {
       "id": "m3",
@@ -41,7 +43,8 @@
       "rack": "B-02",
       "unitsPerPack": 50,
       "reorder": 50,
-      "price": 5.8
+      "price": 5.8,
+      "companyId": "legacy-company-m3"
     },
     {
       "id": "m4",
@@ -55,7 +58,8 @@
       "rack": "A-06",
       "unitsPerPack": 30,
       "reorder": 30,
-      "price": 10
+      "price": 10,
+      "companyId": "legacy-company-m4"
     },
     {
       "id": "m5",
@@ -69,7 +73,8 @@
       "rack": "C-01",
       "unitsPerPack": 14,
       "reorder": 28,
-      "price": 32
+      "price": 32,
+      "companyId": "legacy-company-m5"
     },
     {
       "id": "m6",
@@ -83,7 +88,8 @@
       "rack": "C-04",
       "unitsPerPack": 1,
       "reorder": 5,
-      "price": 460
+      "price": 460,
+      "companyId": "legacy-company-m2"
     },
     {
       "id": "m7",
@@ -97,7 +103,8 @@
       "rack": "D-02",
       "unitsPerPack": 1,
       "reorder": 10,
-      "price": 155
+      "price": 155,
+      "companyId": "legacy-company-m7"
     },
     {
       "id": "m8",
@@ -111,7 +118,8 @@
       "rack": "D-05",
       "unitsPerPack": 20,
       "reorder": 20,
-      "price": 35
+      "price": 35,
+      "companyId": "legacy-company-m8"
     },
     {
       "id": "m9",
@@ -125,7 +133,8 @@
       "rack": "E-01",
       "unitsPerPack": 100,
       "reorder": 30,
-      "price": 45
+      "price": 45,
+      "companyId": "legacy-company-m9"
     },
     {
       "id": "m10",
@@ -139,7 +148,8 @@
       "rack": "B-05",
       "unitsPerPack": 30,
       "reorder": 30,
-      "price": 18
+      "price": 18,
+      "companyId": "legacy-company-m10"
     }
   ],
   "batches": [
@@ -311,5 +321,82 @@
     "paper": "80mm",
     "alertDays": 90
   },
-  "lastBackup": null
+  "lastBackup": null,
+  "companies": [
+    {
+      "id": "legacy-company-m1",
+      "name": "Haleon"
+    },
+    {
+      "id": "legacy-company-m2",
+      "name": "GSK"
+    },
+    {
+      "id": "legacy-company-m3",
+      "name": "Martin Dow"
+    },
+    {
+      "id": "legacy-company-m4",
+      "name": "AGP"
+    },
+    {
+      "id": "legacy-company-m5",
+      "name": "Getz Pharma"
+    },
+    {
+      "id": "legacy-company-m7",
+      "name": "Abbott"
+    },
+    {
+      "id": "legacy-company-m8",
+      "name": "Himont"
+    },
+    {
+      "id": "legacy-company-m9",
+      "name": "BD"
+    },
+    {
+      "id": "legacy-company-m10",
+      "name": "Sample Pharma"
+    }
+  ],
+  "distributorCompanies": [
+    {
+      "supplierId": "s1",
+      "companyId": "legacy-company-m1"
+    },
+    {
+      "supplierId": "s2",
+      "companyId": "legacy-company-m2"
+    },
+    {
+      "supplierId": "s1",
+      "companyId": "legacy-company-m3"
+    },
+    {
+      "supplierId": "s2",
+      "companyId": "legacy-company-m4"
+    },
+    {
+      "supplierId": "s3",
+      "companyId": "legacy-company-m5"
+    },
+    {
+      "supplierId": "s1",
+      "companyId": "legacy-company-m7"
+    },
+    {
+      "supplierId": "s3",
+      "companyId": "legacy-company-m8"
+    },
+    {
+      "supplierId": "s3",
+      "companyId": "legacy-company-m9"
+    },
+    {
+      "supplierId": "s1",
+      "companyId": "legacy-company-m10"
+    }
+  ],
+  "supplierPayments": []
 }

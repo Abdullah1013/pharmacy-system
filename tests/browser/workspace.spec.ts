@@ -1,4 +1,4 @@
-﻿import { test, expect } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 test("sale, invoice, return, persistence and backup work as one flow", async ({
   page,
 }) => {
@@ -101,6 +101,12 @@ test("catalogue, receipts, credit validation, expiry and responsive navigation",
   await page.goto("/");
   await page.getByRole("button", { name: "Inventory", exact: true }).click();
   await page.getByRole("button", { name: "Add medicine", exact: true }).click();
+  await page
+    .getByLabel("Medicine distributor", { exact: true })
+    .selectOption("s1");
+  await page
+    .getByLabel("Medicine company", { exact: true })
+    .selectOption({ label: "Haleon" });
   await page.getByLabel("Brand / medicine name").fill("Test medicine");
   await page.getByLabel("Generic / composition").fill("Demo generic");
   await page.getByLabel("Default selling price / unit (Rs.)").fill("12");
@@ -116,19 +122,35 @@ test("catalogue, receipts, credit validation, expiry and responsive navigation",
     .first()
     .click();
   await page
-    .getByLabel("Medicine", { exact: true })
-    .selectOption({ label: "Test medicine" });
-  await page.getByLabel("Supplier", { exact: true }).selectOption("s1");
-  await page.getByLabel("Supplier invoice / reference").fill("SUP-123");
-  await page.getByLabel("Batch number").fill("TM-001");
-  await page.getByLabel("Expiry date").fill("2099-01-01");
-  await page.getByLabel("Received base units").fill("50");
-  await page.getByLabel("Net purchase cost / unit (Rs.)").fill("8");
-  await page.getByLabel("Selling price / unit (Rs.)").fill("12");
+    .getByLabel("Purchase distributor", { exact: true })
+    .selectOption("s1");
   await page
-    .getByRole("dialog")
-    .getByRole("button", { name: "Receive stock", exact: true })
+    .getByLabel("Purchase company", { exact: true })
+    .selectOption({ label: "Haleon" });
+  await page
+    .getByLabel("Purchase medicine", { exact: true })
+    .selectOption({ label: "Test medicine" });
+  await page
+    .getByLabel("Distributor invoice number", { exact: true })
+    .fill("SUP-123");
+  await page
+    .getByLabel("Purchase batch number", { exact: true })
+    .fill("TM-001");
+  await page.getByLabel("Purchase expiry", { exact: true }).fill("2099-01-01");
+  await page.getByLabel("Purchased quantity", { exact: true }).fill("50");
+  await page
+    .getByLabel("Purchase price / unit (Rs.)", { exact: true })
+    .fill("8");
+  await page
+    .getByLabel("Selling price / base unit (Rs.)", { exact: true })
+    .fill("12");
+  await page
+    .getByRole("button", { name: "Add item to invoice", exact: true })
     .click();
+  await page
+    .getByRole("button", { name: "Save purchase & update stock", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Close dialog", exact: true }).click();
   await expect(
     page.getByRole("row").filter({ hasText: "SUP-123" }),
   ).toContainText("400.00");

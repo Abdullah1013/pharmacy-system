@@ -36,3 +36,16 @@ Requested scope: modern, easy desktop pharmacy software; frontend first, JSON de
 ## Current frontend delivery
 
 Implemented screens and exact limitations are documented in README.md. Native backup scheduling, authentication, LAN synchronization and physical printer certification are not frontend features.
+
+### Purchase workflow delivered (2026-10-29)
+
+- Distributor contacts with a shared company master and many-to-many distributor/company links. Each medicine has one company; linking that company to another distributor reuses its medicines.
+- New catalogue medicines require a distributor and one of its linked companies. Creating a medicine does not increase stock. Company and pack-size changes are blocked after stock exists.
+- One distributor per invoice; multiple companies and medicines per invoice; supplier invoice number and actual invoice date retained separately from entry timestamp.
+- Per-line batch, expiry, quantity, bonus, pack/base-unit conversion, purchase rate, percentage discount, manually entered tax and per-base-unit selling price. Amount = purchased quantity × rate − discount + tax. Bonus increases received stock without increasing billed quantity.
+- Stock cost = net pre-tax purchase amount / all received base units, including bonus. Tax remains separate; no statutory rate is assumed. Confirm input-tax capitalization policy before production.
+- Save validates the entire invoice before committing stock, purchase snapshot and movement records. Repeated physical batches retain separate receipt/valuation lots for source and cost traceability; quarantine/release covers all lots of the physical medicine/batch.
+- Initial paid amount, per-invoice partial payments, outstanding payable, distributor purchase/payment ledger, read-only purchase detail and printable A4 purchase record. This is a purchase subledger, not a full general ledger or cashier settlement system.
+- Old saved data/backups migrate additively from manufacturer names and observed batch suppliers; old paid receipts retain their historical paid status. New company links/payments/purchase lines are included in backup validation.
+
+Research for this change: [ERPNext Purchase Invoice](https://docs.frappe.io/erpnext/purchase-invoice), [Item supplier mappings](https://docs.frappe.io/erpnext/maintaining-suppliers-part-no-in-item), [tax versus stock valuation](https://docs.frappe.io/erpnext/difference-in-total-and-valuation-in-tax-and-charges). The distributor → company → medicine navigation follows the user's supplied reference; these sources support supplier invoices, shared item identity and explicit valuation/tax treatment.

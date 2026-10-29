@@ -1,6 +1,7 @@
 import seed from "./data/pharmacy.json";
 import { validateBackup } from "./domain";
 import type { Database } from "./domain";
+import { normalizePurchasing } from "./purchasing";
 const KEY = "waseela-pharmacy-v1";
 export function readDatabase(): Database {
   const raw = localStorage.getItem(KEY);
@@ -14,9 +15,9 @@ export function readDatabase(): Database {
     if (parsed.settings.name === "Waseela Pharmacy") {
       parsed.settings.name = "Ilmdeen Pharmacy";
     }
-    return parsed;
+    return normalizePurchasing(parsed);
   }
-  return structuredClone(seed) as Database;
+  return normalizePurchasing(structuredClone(seed) as Database);
 }
 export function saveDatabase(db: Database) {
   localStorage.setItem(KEY, JSON.stringify(db));

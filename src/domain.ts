@@ -1,4 +1,12 @@
+import { validatePurchasing } from "./purchasing.ts";
+import type {
+  Company,
+  DistributorCompany,
+  PurchaseLine,
+  SupplierPayment,
+} from "./purchasing";
 export type Medicine = {
+  companyId?: string;
   id: string;
   name: string;
   generic: string;
@@ -57,6 +65,13 @@ export type Purchase = {
   total: number;
   batchId: string;
   qty: number;
+  invoiceDate?: string;
+  distributorName?: string;
+  lines?: PurchaseLine[];
+  paid?: number;
+  subtotal?: number;
+  discountTotal?: number;
+  taxTotal?: number;
 };
 export type Movement = {
   id: string;
@@ -84,6 +99,9 @@ export type Settings = {
   alertDays: number;
 };
 export type Database = {
+  companies?: Company[];
+  distributorCompanies?: DistributorCompany[];
+  supplierPayments?: SupplierPayment[];
   version: number;
   medicines: Medicine[];
   batches: Batch[];
@@ -402,6 +420,7 @@ export function validateBackup(value: unknown): value is Database {
   ])
     if (new Set(records.map((r) => r.id)).size !== records.length) return false;
   if (d.lastBackup !== null && !date(d.lastBackup)) return false;
+  if (!validatePurchasing(d)) return false;
   return (
     d.purchases.every(
       (p) =>

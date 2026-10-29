@@ -60,6 +60,14 @@ import type {
   Sale,
 } from "./domain";
 import { download, readDatabase, saveDatabase } from "./store";
+import { normalizePurchasing, setPhysicalBatchStatus } from "./purchasing";
+import {
+  PurchaseForm,
+  PurchaseWorkspace,
+  DistributorWorkspace,
+  PurchaseInvoice,
+} from "./PurchaseModule";
+import type { Purchase } from "./domain";
 
 type Page =
   | "Overview"
@@ -69,12 +77,18 @@ type Page =
   | "Purchases"
   | "Invoices"
   | "Customers"
-  | "Suppliers"
+  | "Distributors"
   | "Reports"
   | "Backup & restore"
   | "Settings";
 type Dialog =
-  | { kind: "medicine"; medicine?: Medicine }
+  | {
+      kind: "medicine";
+      medicine?: Medicine;
+      supplierId?: string;
+      companyId?: string;
+    }
+  | { kind: "purchase"; purchase: Purchase }
   | { kind: "stock" }
   | { kind: "party"; type: "customers" | "suppliers" }
   | { kind: "receipt"; sale: Sale }
@@ -113,7 +127,7 @@ const nav = [
       { name: "Purchases", icon: ShoppingBag },
       { name: "Invoices", icon: FileText },
       { name: "Customers", icon: Users },
-      { name: "Suppliers", icon: Truck },
+      { name: "Distributors", icon: Truck },
       { name: "Reports", icon: ClipboardList },
     ],
   },
@@ -459,7 +473,7 @@ function Workspace({ initial }: { initial: Database }) {
         throw new Error(
           "Invalid backup. Structure or records did not pass validation.",
         );
-      setDialog({ kind: "restore", data: value });
+      setDialog({ kind: "restore", data: normalizePurchasing(value) });
     } catch (e) {
       setToast((e as Error).message);
     }
@@ -478,7 +492,7 @@ function Workspace({ initial }: { initial: Database }) {
     Purchases: "Keep your shelves ready.",
     Invoices: "Every sale, neatly recorded.",
     Customers: "Care starts with knowing people.",
-    Suppliers: "Your supply network, organized.",
+    Distributors: "Your supply network, organized.",
     Reports: "Make sense of your numbers.",
     "Backup & restore": "Keep your work protected.",
     Settings: "Make this workspace yours.",
@@ -502,7 +516,7 @@ function Workspace({ initial }: { initial: Database }) {
         <Plus size={17} />
         Receive stock
       </button>
-    ) : page === "Customers" || page === "Suppliers" ? (
+    ) : page === "Customers" || page === "Distributors" ? (
       <button
         className="primary"
         onClick={() =>
@@ -513,7 +527,7 @@ function Workspace({ initial }: { initial: Database }) {
         }
       >
         <Plus size={17} />
-        Add {page === "Customers" ? "customer" : "supplier"}
+        Add {page === "Customers" ? "customer" : "distributor"}
       </button>
     ) : null;
   function stockTable(batches: Batch[], actions = false) {
@@ -523,6 +537,7 @@ function Workspace({ initial }: { initial: Database }) {
           <thead>
             <tr>
               <th>Medicine / batch</th>
+              <th>Distributor / purchase</th>
               <th>Expiry date</th>
               <th>Remaining</th>
               <th>Unit price</th>
@@ -540,6 +555,16 @@ function Workspace({ initial }: { initial: Database }) {
                   </strong>
                   <small>
                     {b.number} · Rack {med(b).rack}
+                  </small>
+                </td>
+                <td>
+                  {db.suppliers.find((s) => s.id === b.supplierId)?.name || "—"}
+                  <small>
+                    {db.purchases.find(
+                      (p) =>
+                        p.lines?.some((l) => l.batchId === b.id) ||
+                        p.batchId === b.id,
+                    )?.reference || "Opening stock"}
                   </small>
                 </td>
                 <td>
@@ -589,19 +614,21 @@ function Workspace({ initial }: { initial: Database }) {
                           );
                           return;
                         }
-                        commit({
-                          ...db,
-                          batches: db.batches.map((x) =>
-                            x.id === b.id
-                              ? {
-                                  ...x,
-                                  status:
-                                    x.status === "quarantine"
-                                      ? "available"
-                                      : "quarantine",
-                                }
-                              : x,
-                          ),
+                        act(() => {
+                          if (
+                            commit(
+                              setPhysicalBatchStatus(
+                                db,
+                                b.id,
+                                b.status === "quarantine"
+                                  ? "available"
+                                  : "quarantine",
+                              ),
+                            )
+                          )
+                            setToast(
+                              "Status updated for all receipts of this physical batch.",
+                            );
                         });
                       }}
                     >
@@ -1688,77 +1715,28 @@ function Workspace({ initial }: { initial: Database }) {
             </section>
           )}
           {page === "Purchases" && (
-            <>
-              <div className="notice">
-                <Truck size={20} />
-                <div>
-                  <strong>Record paid stock receipts</strong>
-                  <span>
-                    Add a medicine batch with its supplier, expiry, quantity and
-                    actual purchase cost. Quantities are in base units.
-                  </span>
-                </div>
-              </div>
-              <section className="panel">
-                <div className="panel-heading">
-                  <div>
-                    <h2>Stock receipts</h2>
-                    <p>Incoming purchases recorded in this workspace</p>
-                  </div>
-                  <Badge>{db.purchases.length} receipts</Badge>
-                </div>
-                {db.purchases.length ? (
-                  <div className="table-scroll">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Receipt / reference</th>
-                          <th>Supplier</th>
-                          <th>Received</th>
-                          <th>Quantity</th>
-                          <th className="right">Cost</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {db.purchases.map((p) => (
-                          <tr key={p.id}>
-                            <td>
-                              <strong>{p.id}</strong>
-                              <small>{p.reference}</small>
-                            </td>
-                            <td>
-                              {
-                                db.suppliers.find((s) => s.id === p.supplierId)
-                                  ?.name
-                              }
-                            </td>
-                            <td>{dateLabel(p.date)}</td>
-                            <td>{p.qty} units</td>
-                            <td className="right">Rs. {money(p.total)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <Empty
-                    title="Ready to receive your next delivery"
-                    detail="Record a paid stock receipt to update the relevant medicine batch."
-                    action={
-                      <button
-                        className="secondary"
-                        onClick={() => setDialog({ kind: "stock" })}
-                      >
-                        <Plus size={16} />
-                        Receive stock
-                      </button>
-                    }
-                  />
-                )}
-              </section>
-            </>
+            <PurchaseWorkspace
+              db={db}
+              commit={commit}
+              notify={setToast}
+              onView={(purchase) => setDialog({ kind: "purchase", purchase })}
+              onReceive={() => setDialog({ kind: "stock" })}
+            />
           )}
-          {(page === "Customers" || page === "Suppliers") && (
+          {page === "Distributors" && (
+            <DistributorWorkspace
+              db={db}
+              commit={commit}
+              notify={setToast}
+              onAddMedicine={(supplierId, companyId) =>
+                setDialog({ kind: "medicine", supplierId, companyId })
+              }
+              onViewPurchase={(purchase) =>
+                setDialog({ kind: "purchase", purchase })
+              }
+            />
+          )}
+          {page === "Customers" && (
             <section className="panel">
               <Toolbar
                 query={query}
@@ -2070,7 +2048,7 @@ function Workspace({ initial }: { initial: Database }) {
           }}
         >
           <section
-            className={`modal ${dialog.kind === "receipt" ? "receipt-modal" : ""}`}
+            className={`modal ${dialog.kind === "receipt" || dialog.kind === "purchase" ? "receipt-modal" : dialog.kind === "stock" ? "purchase-modal" : ""}`}
             role="dialog"
             aria-modal="true"
             aria-label={
@@ -2098,6 +2076,9 @@ function Workspace({ initial }: { initial: Database }) {
             </button>
             {dialog.kind === "medicine" && (
               <MedicineForm
+                db={db}
+                supplierId={dialog.supplierId}
+                companyId={dialog.companyId}
                 medicine={dialog.medicine}
                 onSave={(m) => {
                   if (
@@ -2119,6 +2100,40 @@ function Workspace({ initial }: { initial: Database }) {
                     );
                     return;
                   }
+                  if (
+                    !db.distributorCompanies?.some(
+                      (l) => l.companyId === m.companyId,
+                    ) ||
+                    !db.companies?.some((c) => c.id === m.companyId)
+                  ) {
+                    setToast("Select a linked company for the medicine.");
+                    return;
+                  }
+                  if (
+                    db.medicines.some(
+                      (x) =>
+                        x.id !== m.id &&
+                        x.companyId === m.companyId &&
+                        x.name.toLowerCase() === m.name.toLowerCase() &&
+                        x.strength.toLowerCase() === m.strength.toLowerCase() &&
+                        x.form === m.form,
+                    )
+                  ) {
+                    setToast(
+                      "This medicine already exists under the company. Link that company to the other distributor instead of creating a duplicate.",
+                    );
+                    return;
+                  }
+                  if (
+                    dialog.medicine &&
+                    dialog.medicine.companyId !== m.companyId &&
+                    db.batches.some((b) => b.medicineId === m.id)
+                  ) {
+                    setToast(
+                      "Company cannot change after stock exists. Register a separate medicine if needed.",
+                    );
+                    return;
+                  }
                   const next = {
                     ...db,
                     medicines: dialog.medicine
@@ -2135,46 +2150,21 @@ function Workspace({ initial }: { initial: Database }) {
               />
             )}
             {dialog.kind === "stock" && (
-              <StockForm
+              <PurchaseForm
                 db={db}
-                onSave={(batch, reference) => {
-                  const next = structuredClone(db);
-                  const existing = next.batches.find(
-                    (b) =>
-                      b.medicineId === batch.medicineId &&
-                      b.number.toLowerCase() === batch.number.toLowerCase(),
-                  );
-                  if (existing) {
-                    setToast(
-                      "This medicine batch already exists. Use a unique batch number; merging receipts needs a weighted-cost policy.",
-                    );
-                    return;
-                  }
-                  next.batches.push(batch);
-                  const purchase = {
-                    id: `PUR-${String(db.purchases.length + 1).padStart(5, "0")}`,
-                    date: new Date().toISOString(),
-                    supplierId: batch.supplierId,
-                    reference,
-                    total: round(batch.qty * batch.cost),
-                    batchId: batch.id,
-                    qty: batch.qty,
-                  };
-                  next.purchases.unshift(purchase);
-                  next.movements.unshift({
-                    id: crypto.randomUUID(),
-                    date: purchase.date,
-                    batchId: batch.id,
-                    qty: batch.qty,
-                    type: "Purchase receipt",
-                    reference: purchase.id,
-                  });
+                onCancel={() => setDialog(null)}
+                onSave={(next, purchase) => {
                   if (commit(next)) {
-                    setDialog(null);
-                    setToast("Stock received and inventory updated.");
+                    setDialog({ kind: "purchase", purchase });
+                    setToast(
+                      "Purchase saved. Batch stock and distributor payable updated.",
+                    );
                   }
                 }}
               />
+            )}
+            {dialog.kind === "purchase" && (
+              <PurchaseInvoice db={db} purchase={dialog.purchase} />
             )}
             {dialog.kind === "party" && (
               <PartyForm
@@ -2499,11 +2489,31 @@ function SalesChart({
 }
 function MedicineForm({
   medicine,
+  db,
+  supplierId: initialSupplier,
+  companyId: initialCompany,
   onSave,
 }: {
   medicine?: Medicine;
+  db: Database;
+  supplierId?: string;
+  companyId?: string;
   onSave: (m: Medicine) => void;
 }) {
+  const [supplierId, setSupplier] = useState(
+    initialSupplier ||
+      db.distributorCompanies?.find((l) => l.companyId === medicine?.companyId)
+        ?.supplierId ||
+      "",
+  );
+  const [companyId, setCompany] = useState(
+    initialCompany || medicine?.companyId || "",
+  );
+  const companies = (db.companies || []).filter((c) =>
+    db.distributorCompanies?.some(
+      (l) => l.supplierId === supplierId && l.companyId === c.id,
+    ),
+  );
   return (
     <form
       onSubmit={(e) => {
@@ -2516,7 +2526,8 @@ function MedicineForm({
           strength: String(f.get("strength")).trim(),
           form: String(f.get("form")),
           category: String(f.get("category")).trim(),
-          manufacturer: String(f.get("manufacturer")).trim(),
+          companyId,
+          manufacturer: db.companies!.find((c) => c.id === companyId)!.name,
           barcode: String(f.get("barcode")).trim(),
           rack: String(f.get("rack")).trim(),
           unitsPerPack: Number(f.get("unitsPerPack")),
@@ -2529,11 +2540,48 @@ function MedicineForm({
       <h2>{medicine ? "Edit medicine" : "Add a medicine"}</h2>
       <p>Prices and stock quantities use the smallest saleable unit.</p>
       <div className="form-grid">
+        <Field label="Distributor">
+          <select
+            aria-label="Medicine distributor"
+            required
+            value={supplierId}
+            onChange={(e) => {
+              setSupplier(e.target.value);
+              setCompany("");
+            }}
+          >
+            <option value="">Select distributor</option>
+            {db.suppliers.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Company">
+          <select
+            aria-label="Medicine company"
+            required
+            disabled={!supplierId}
+            value={companyId}
+            onChange={(e) => setCompany(e.target.value)}
+          >
+            <option value="">Select linked company</option>
+            {companies.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+        {supplierId && !companies.length && (
+          <p>First link a company under Distributors ? Manage company links.</p>
+        )}
+
         {[
           { key: "name", label: "Brand / medicine name" },
           { key: "generic", label: "Generic / composition" },
           { key: "strength", label: "Strength" },
-          { key: "manufacturer", label: "Manufacturer" },
           { key: "category", label: "Category" },
           { key: "barcode", label: "Barcode" },
           { key: "rack", label: "Rack / shelf" },
@@ -2605,91 +2653,6 @@ function MedicineForm({
     </form>
   );
 }
-function StockForm({
-  db,
-  onSave,
-}: {
-  db: Database;
-  onSave: (b: Batch, reference: string) => void;
-}) {
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        const f = new FormData(e.currentTarget);
-        onSave(
-          {
-            id: crypto.randomUUID(),
-            medicineId: String(f.get("medicineId")),
-            supplierId: String(f.get("supplierId")),
-            number: String(f.get("number")).trim(),
-            expiry: String(f.get("expiry")),
-            qty: Number(f.get("qty")),
-            cost: Number(f.get("cost")),
-            price: Number(f.get("price")),
-            status: "available",
-          },
-          String(f.get("reference")).trim(),
-        );
-      }}
-    >
-      <div className="eyebrow">PURCHASE / PAID STOCK RECEIPT</div>
-      <h2>Receive a new batch</h2>
-      <p>Check the physical batch number and expiry before saving.</p>
-      <div className="form-grid">
-        <Field label="Medicine">
-          <select name="medicineId" required>
-            <option value="">Select medicine</option>
-            {db.medicines.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.name} {m.strength}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Supplier">
-          <select name="supplierId" required>
-            <option value="">Select supplier</option>
-            {db.suppliers.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Supplier invoice / reference">
-          <input name="reference" required maxLength={100} />
-        </Field>
-        <Field label="Batch number">
-          <input name="number" required maxLength={60} />
-        </Field>
-        <Field label="Expiry date">
-          <input type="date" name="expiry" min={today()} required />
-        </Field>
-        <Field label="Received base units">
-          <input name="qty" type="number" min="1" step="1" required />
-        </Field>
-        <Field label="Net purchase cost / unit (Rs.)">
-          <input name="cost" type="number" min="0" step="0.01" required />
-        </Field>
-        <Field label="Selling price / unit (Rs.)">
-          <input name="price" type="number" min="0.01" step="0.01" required />
-        </Field>
-      </div>
-      <div className="notice small-notice">
-        Enter net cost after supplier discounts. Credit purchases and bonus
-        schemes are planned separately.
-      </div>
-      <div className="form-footer">
-        <span>Saving immediately increases stock.</span>
-        <button className="primary" type="submit">
-          <Package size={16} />
-          Receive stock
-        </button>
-      </div>
-    </form>
-  );
-}
 function PartyForm({
   type,
   onSave,
@@ -2711,7 +2674,7 @@ function PartyForm({
       }}
     >
       <div className="eyebrow">CONTACT DIRECTORY</div>
-      <h2>Add {type === "customers" ? "customer" : "supplier"}</h2>
+      <h2>Add {type === "customers" ? "customer" : "distributor"}</h2>
       <p>Keep billing and contact details together.</p>
       <div className="form-grid single">
         <Field label="Full name / business name">
