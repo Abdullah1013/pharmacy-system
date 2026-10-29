@@ -514,7 +514,7 @@ function Workspace({ initial }: { initial: Database }) {
     ) : page === "Purchases" ? (
       <button className="primary" onClick={() => setDialog({ kind: "stock" })}>
         <Plus size={17} />
-        Receive stock
+        Make purchase
       </button>
     ) : page === "Customers" || page === "Distributors" ? (
       <button
@@ -943,7 +943,7 @@ function Workspace({ initial }: { initial: Database }) {
                       page: "Point of sale",
                     },
                     {
-                      title: "Receive stock",
+                      title: "Make purchase",
                       detail: "Record an incoming purchase",
                       icon: ArrowDownLeft,
                       page: "Purchases",
@@ -965,7 +965,7 @@ function Workspace({ initial }: { initial: Database }) {
                       className="quick-action"
                       key={x.title}
                       onClick={() =>
-                        x.title === "Receive stock"
+                        x.title === "Make purchase"
                           ? setDialog({ kind: "stock" })
                           : navigate(x.page as Page)
                       }
@@ -2057,7 +2057,7 @@ function Workspace({ initial }: { initial: Database }) {
                 : dialog.kind === "medicine"
                   ? "Medicine details"
                   : dialog.kind === "stock"
-                    ? "Receive stock"
+                    ? "Make purchase"
                     : dialog.kind === "return"
                       ? "Record sale return"
                       : dialog.kind === "restore"
@@ -2143,7 +2143,7 @@ function Workspace({ initial }: { initial: Database }) {
                   if (commit(next)) {
                     setDialog(null);
                     setToast(
-                      "Medicine saved. Receive stock to make it available for sale.",
+                      "Medicine saved. Record a purchase to make it available for sale.",
                     );
                   }
                 }}

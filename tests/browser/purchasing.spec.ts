@@ -52,7 +52,7 @@ test("build distributor chain, receive multi-company invoice, record payment and
   });
   await page.getByRole("button", { name: "Purchases", exact: true }).click();
   await page
-    .getByRole("button", { name: "Receive stock", exact: true })
+    .getByRole("button", { name: "Make purchase", exact: true })
     .first()
     .click();
   await expect(page.getByLabel("Purchase company")).toBeDisabled();

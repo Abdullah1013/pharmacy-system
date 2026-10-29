@@ -48,6 +48,6 @@ Purchase tax percentages are entered by the user, applied after line discount an
 
 ## Purchase setup and migration
 
-Open **Distributors**, select a distributor and use **Manage company links** to link an existing company or create one. Use **Add medicine** within that company; creating a catalogue record does not increase stock. The same company/medicine can be supplied by multiple distributors without duplicate medicine masters. Open **Purchases ? Receive stock** to build the invoice, then save after reviewing totals and paid amount.
+Open **Distributors**, select a distributor and use **Manage company links** to link an existing company or create one. Use **Add medicine** within that company; creating a catalogue record does not increase stock. The same company/medicine can be supplied by multiple distributors without duplicate medicine masters. Open **Purchases > Make purchase** to build the invoice, then save after reviewing totals and paid amount.
 
 Existing v1 data and backups remain supported: company masters derive from existing manufacturer names and distributor links derive only from recorded stock sources. Legacy paid receipts retain their historical paid status. New receipts retain separate valuation lots, even when the physical batch number repeats, preserving each purchase cost/source. Inventory batches show the distributor and invoice reference.

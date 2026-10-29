@@ -128,7 +128,7 @@ export function PurchaseForm({
   return (
     <div className="purchase-form">
       <div className="eyebrow">PURCHASE / DISTRIBUTOR INVOICE</div>
-      <h2>Receive a purchase</h2>
+      <h2>Make purchase</h2>
       <p>
         One distributor per invoice. Add medicines from any of its linked
         companies.
@@ -597,7 +597,7 @@ export function PurchaseWorkspace({
               </p>
               <button className="secondary" onClick={onReceive}>
                 <Plus size={15} />
-                Receive stock
+                Make purchase
               </button>
             </div>
           )}

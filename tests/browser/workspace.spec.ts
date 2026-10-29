@@ -118,7 +118,7 @@ test("catalogue, receipts, credit validation, expiry and responsive navigation",
   ).toContainText("Out of stock");
   await page.getByRole("button", { name: "Purchases", exact: true }).click();
   await page
-    .getByRole("button", { name: "Receive stock", exact: true })
+    .getByRole("button", { name: "Make purchase", exact: true })
     .first()
     .click();
   await page
